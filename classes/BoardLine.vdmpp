@@ -1,0 +1,23 @@
+class BoardLine
+types
+-- TODO Define types here
+public Row = nat1
+inv r == r in set {1,...,9};  -- outra vez? (definido em Cell como reutilizar?)
+public Line = seq of Cell
+inv l == len (l) = 9;
+values
+-- TODO Define values here
+instance variables
+-- TODO Define instance variables here
+private line : Line;
+operations
+-- TODO Define operations here
+public getCell(number : Row) res : Cell ==
+return line(number)
+pre number in set inds line;  --Necessario mesmo com os tipos ja declarados??
+functions
+-- TODO Define functiones here 
+
+traces
+-- TODO Define Combinatorial Test Traces here
+end BoardLine

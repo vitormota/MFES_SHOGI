@@ -1,0 +1,19 @@
+class Piece
+types
+-- TODO Define types here
+public Player = <White> | <Black>; -- Define player again??!
+public Owner = [Player]
+inv o == o <> nil; -- tem de pertence a um jogador
+values
+-- TODO Define values here
+instance variables
+-- TODO Define instance variables here
+private belongTo : Owner;
+private promoted : bool := false;
+operations
+-- TODO Define operations here
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end Piece

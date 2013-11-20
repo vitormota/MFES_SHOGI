@@ -1,0 +1,20 @@
+class Cell
+types
+-- TODO Define types here
+public Row = nat
+inv r == r in set {1,...,9};
+public Column = nat
+inv c == c in set {1,...,9};
+values
+-- TODO Define values here
+instance variables
+-- TODO Define instance variables here
+public y : Column;
+public x : Row;
+operations
+-- TODO Define operations here
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end Cell
