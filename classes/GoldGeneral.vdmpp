@@ -1,0 +1,16 @@
+class GoldGeneral
+types
+-- TODO Define types here
+values
+-- TODO Define values here
+instance variables
+-- TODO Define instance variables here
+operations
+public validMovement: Cell*Cell ==> bool
+	validMovement(c1,c2) == return (c1.x = c2.x) or --Falta ver a direcao e diagonais
+																 (c1.y = c2.y and (c1.x = c2.x-1 or c1.x=c2.x+1));
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end GoldGeneral

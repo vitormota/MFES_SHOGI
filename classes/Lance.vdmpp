@@ -1,0 +1,15 @@
+class Lance is subclass of Piece
+types
+-- TODO Define types here
+values
+-- TODO Define values here
+instance variables
+-- TODO Define instance variables here
+operations
+public validMovement: Cell*Cell ==> bool
+	validMovement(c1,c2) == return c1.x = c2.x; --Falta ver se direção correta e se nao passa por cima de nenhuma peça
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end Lance

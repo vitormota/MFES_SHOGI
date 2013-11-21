@@ -1,15 +1,15 @@
-class Board
+class Pawn is subclass of Piece
 types
+-- TODO Define types here
 values
 -- TODO Define values here
 instance variables
 -- TODO Define instance variables here
-private capturedPieces : seq of [Piece];
-
 operations
--- TODO Define operations here
+	public validMovement: Cell*Cell ==> bool
+	validMovement(c1,c2) == return c1.x = c2.x; --Falta ver se na direção correta
 functions
 -- TODO Define functiones here
 traces
 -- TODO Define Combinatorial Test Traces here
-end Board
+end Pawn

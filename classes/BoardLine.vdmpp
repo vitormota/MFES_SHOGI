@@ -14,7 +14,6 @@ operations
 -- TODO Define operations here
 public getCell(number : Row) res : Cell ==
 return line(number)
-pre number in set inds line;  --Necessario mesmo com os tipos ja declarados??
 functions
 -- TODO Define functiones here 
 
