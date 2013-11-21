@@ -11,7 +11,7 @@ public King: Player ==> King
 King(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) = 1 ) or
+validMovement(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) = 1 ) or
 																 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 0 ) or
 																 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 1 ); 
 functions
