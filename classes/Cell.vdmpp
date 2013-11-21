@@ -1,9 +1,9 @@
 class Cell
 types
 -- TODO Define types here
-public Row = nat
+public Row = nat1
 inv r == r in set {1,...,9};
-public Column = nat
+public Column = nat1
 inv c == c in set {1,...,9};
 values
 -- TODO Define values here
@@ -12,7 +12,10 @@ instance variables
 public y : Column;
 public x : Row;
 operations
--- TODO Define operations here
+
+public Cell: nat1 * nat1 ==> Cell
+Cell(xi,yi)== (x:=xi;y:=yi)
+
 functions
 -- TODO Define functiones here
 traces

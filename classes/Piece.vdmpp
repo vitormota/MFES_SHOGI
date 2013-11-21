@@ -1,6 +1,5 @@
 class Piece
 types
--- TODO Define types here
 public Player = <White> | <Black>; -- Define player again??!
 values
 -- TODO Define values here
@@ -9,14 +8,16 @@ instance variables
 private belongTo : Player;
 private promoted : bool := false;
 operations
+
 protected Piece: Player ==> Piece
 Piece(p) == belongTo:= p;
 
 protected direction: () ==> int
 direction() == if belongTo = <White> then return 1 else return -1;
+
 functions
-	protected dist: nat*nat -> nat
-	dist(n1,n2) == abs(n1-n2);
+protected dist: nat*nat -> nat
+dist(n1,n2) == abs(n1-n2);
 traces
 -- TODO Define Combinatorial Test Traces here
 end Piece

@@ -1,4 +1,4 @@
-class Bishop
+class Bishop is subclass of Piece
 types
 -- TODO Define types here
 values
@@ -6,8 +6,12 @@ values
 instance variables
 -- TODO Define instance variables here
 operations
+
+public Bishop: Player ==> Bishop
+Bishop(p) == Piece(p);
+
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return (c1.x - c2.x) * (c1.x - c2.x) = (c1.y - c2.y) * (c1.y - c2.y); 
+	validMovement(c1,c2) == return abs(c1.x - c2.x) = abs(c1.y - c2.y); 
 functions
 -- TODO Define functiones here
 traces

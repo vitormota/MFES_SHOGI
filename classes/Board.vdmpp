@@ -4,7 +4,7 @@ values
 -- TODO Define values here
 instance variables
 -- TODO Define instance variables here
-private capturedPieces : seq of [Piece];
+private capturedPieces : seq of [Piece] := [];
 
 operations
 -- TODO Define operations here
