@@ -5,8 +5,8 @@ values
 -- TODO Define values here
 instance variables
 -- TODO Define instance variables here
-private belongTo : Player;
-private promoted : bool := false;
+public belongTo : Player;
+public promoted : bool := false;
 operations
 
 protected Piece: Player ==> Piece
@@ -18,9 +18,13 @@ direction() == if belongTo = <White> then return 1 else return -1;
 public validMovement: Cell*Cell ==> bool
 validMovement(c1,c2) == is subclass responsibility
 
+
+
 functions
 protected dist: nat*nat -> nat
 dist(n1,n2) == abs(n1-n2);
+
+
 traces
 -- TODO Define Combinatorial Test Traces here
 end Piece

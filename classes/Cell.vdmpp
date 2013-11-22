@@ -28,6 +28,8 @@ promotionZone(p) ==
 	then return true
 	else return false;
 	
+
+	
 functions
 -- TODO Define functiones here
 traces
