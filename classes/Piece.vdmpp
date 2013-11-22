@@ -15,6 +15,9 @@ Piece(p) == belongTo:= p;
 protected direction: () ==> int
 direction() == if belongTo = <White> then return 1 else return -1;
 
+public validMovement: Cell*Cell ==> bool
+validMovement(c1,c2) == is subclass responsibility
+
 functions
 protected dist: nat*nat -> nat
 dist(n1,n2) == abs(n1-n2);

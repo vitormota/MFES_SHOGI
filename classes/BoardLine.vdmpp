@@ -1,22 +1,33 @@
 class BoardLine
 types
--- TODO Define types here
-public Row = nat1
-inv r == r in set {1,...,9};  -- outra vez? (definido em Cell como reutilizar?)
+
 public Line = map nat1 to Cell
-inv l == card(dom(l)) = 9;
+inv l == card(dom(l)) = 9 and dom(l) = {1,...,9};
 values
 -- TODO Define values here
 instance variables
--- TODO Define instance variables here
-private line : Line := {|->};
+
+private line : Line;
+private y : nat1;
+
+inv y in set {1,...,9};
 operations
--- TODO Define operations here
-public getCell: Row ==> Cell 
+
+public BoardLine: seq of Cell * nat1 ==> BoardLine
+BoardLine(cells, yi) == (y:=yi;
+												 line:= {x|->cell | x in set {1,...,9}, cell in set elems(cells) &
+																			      cell.x = x };
+												)
+pre len cells = 9
+post forall cell in set elems(cells) & cell.y = yi and yi = y;
+
+
+public getCell: nat1 ==> Cell 
 getCell(r) == return line(r)
+pre r in set dom(line)
+post line = line~;
 
 functions
--- TODO Define functiones here 
 
 traces
 -- TODO Define Combinatorial Test Traces here

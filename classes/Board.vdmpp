@@ -1,15 +1,69 @@
 class Board
 types
+public PieceType = <LANCE> | <BISHOP> | <GOLDGENERAL> | <SILVERGENERAL> | <KING> | <KNIGHT> | <PAWN> | <ROOK> |
+                   <NONE>;
+                   
+public Player = <White> | <Black>;
 values
--- TODO Define values here
+private startPositions = [
+													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>],
+													 [<NONE>,  <BISHOP>, <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <ROOK>,  <NONE> ],
+													 [<PAWN>,  <PAWN>,   <PAWN>,          <PAWN>,        <PAWN>, <PAWN>,        <PAWN>,          <PAWN>,  <PAWN> ],
+													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
+													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
+													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
+													 [<PAWN>,  <PAWN>,   <PAWN>,          <PAWN>,        <PAWN>, <PAWN>,        <PAWN>,          <PAWN>,  <PAWN> ],
+													 [<NONE>,  <ROOK>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <BISHOP>,<NONE> ],
+													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>]
+												 ]
 instance variables
 -- TODO Define instance variables here
-private capturedPieces : seq of [Piece] := [];
+private capturedPieces : seq of [Piece];
+private lines: map nat1 to BoardLine;
+
+
+inv card(dom(lines)) = 9 and dom(lines) = {1,...,9};
+
+private static board:Board := new Board();
 
 operations
--- TODO Define operations here
+
+protected Board: () ==> Board
+Board() == 
+(
+	lines:= {y |-> new BoardLine( mapStartSeq(startPositions(y), 1, y), y ) | y in set {1,...,9}};
+	capturedPieces := [];
+);
+
+public static getInstance: () ==> Board
+getInstance() == return board;
+
+public getCell: nat1*nat1 ==> Cell
+getCell(x,y) == return lines(y).getCell(x);
+
 functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+private mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
+mapStartSeq(s, x, y) ==
+(
+	if s = [] then []
+	elseif hd s = <LANCE> then [new Cell(x,y,new Lance(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KNIGHT> then [new Cell(x,y,new Knight(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <SILVERGENERAL> then [new Cell(x,y,new SilverGeneral(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <GOLDGENERAL> then [new Cell(x,y,new GoldGeneral(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KING> then [new Cell(x,y,new King(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <BISHOP> then [new Cell(x,y,new Bishop(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <ROOK> then [new Cell(x,y,new Rook(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <PAWN> then [new Cell(x,y,new Pawn(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	else [new Cell(x,y)] ^ mapStartSeq(tl s, x+1, y)
+	
+);
+
+private zone: nat1 -> Player
+zone(y) == 
+(
+	if y < 4 then <White>
+	elseif y > 6 then <Black>
+	else nil 
+);
+
 end Board

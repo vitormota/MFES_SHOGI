@@ -3,22 +3,19 @@ types
 
 public Player = <White> | <Black>;
 
-public Row = nat1
-inv r == r in set {1,...,9};
-
-public Column = nat1
-inv c == c in set {1,...,9};
 values
 -- TODO Define values here
 instance variables
--- TODO Define instance variables here
-public y : Column;
-public x : Row;
+
+public y : nat1;
+public x : nat1;
 public piece: [Piece];
+
+inv x in set {1,...,9} and y in set {1,...,9}
 operations
 
 public Cell: nat1 * nat1 ==> Cell
-Cell(xi,yi)== (x:=xi;y:=yi;piece:=nil);
+Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
 
 public Cell: nat1*nat1*Piece==>Cell
 Cell(xi,yi,p)==(x:=xi;y:=yi;piece:=p);
