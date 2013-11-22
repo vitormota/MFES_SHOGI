@@ -5,7 +5,7 @@ values
 -- TODO Define values here
 instance variables
 -- TODO Define instance variables here
-private belongTo : Player;
+public belongTo : Player;
 private promoted : bool := false;
 operations
 
@@ -13,7 +13,7 @@ protected Piece: Player ==> Piece
 Piece(p) == belongTo:= p;
 
 protected direction: () ==> int
-direction() == if belongTo = <White> then return 1 else return -1;
+direction() == if belongTo = <White> then return -1 else return 1;
 
 public validMovement: Cell*Cell ==> bool
 validMovement(c1,c2) == is subclass responsibility

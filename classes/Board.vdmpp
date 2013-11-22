@@ -18,8 +18,9 @@ private startPositions = [
 												 ]
 instance variables
 -- TODO Define instance variables here
-private capturedPieces : seq of [Piece];
+private capturedPieces : set of Piece;
 private lines: map nat1 to BoardLine;
+public turn: Player;
 
 
 inv card(dom(lines)) = 9 and dom(lines) = {1,...,9};
@@ -32,7 +33,8 @@ protected Board: () ==> Board
 Board() == 
 (
 	lines:= {y |-> new BoardLine( mapStartSeq(startPositions(y), 1, y), y ) | y in set {1,...,9}};
-	capturedPieces := [];
+	capturedPieces := {};
+	turn:= <White>;
 );
 
 public static getInstance: () ==> Board
@@ -40,6 +42,35 @@ getInstance() == return board;
 
 public getCell: nat1*nat1 ==> Cell
 getCell(x,y) == return lines(y).getCell(x);
+
+public dropPiece: Cell*Piece ==> ()
+dropPiece(c,p) == 
+(
+	c.piece:= p;
+	capturedPieces:= capturedPieces \ {p};
+	
+	if turn = <White> then turn := <Black> else turn := <White> 
+)
+pre c.piece = nil and p in set capturedPieces --Falta verificar condições mais complexas referentes a checkmates e pawns
+post p not in set capturedPieces and c.piece = p and turn <> turn~; 
+
+public move: Cell*Cell ==> ()
+move(c1,c2) == 
+(
+	if c2.piece <> nil 
+	then capturedPieces:= capturedPieces union {c2.piece}; --mudar player
+	
+	c2.piece:= c1.piece;
+	c1.piece:= nil;
+	
+	if turn = <White> then turn := <Black> else turn := <White> 
+)
+pre c1 = getCell(c1.x, c1.y) and c2 = getCell(c2.x,c2.y) and c1.piece <> nil and c1.piece.validMovement(c1,c2) and c1.piece.belongTo = turn
+post c1.piece = nil and turn <> turn~;
+
+
+public getCapturedPieces: () ==> set of Piece
+getCapturedPieces() == return capturedPieces;
 
 functions
 private mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
@@ -55,8 +86,8 @@ mapStartSeq(s, x, y) ==
 	elseif hd s = <ROOK> then [new Cell(x,y,new Rook(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
 	elseif hd s = <PAWN> then [new Cell(x,y,new Pawn(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
 	else [new Cell(x,y)] ^ mapStartSeq(tl s, x+1, y)
-	
-);
+)
+pre y > 0 and y < 10 and x > 0 and x < 10 and len s = 10 - x; 
 
 private zone: nat1 -> Player
 zone(y) == 

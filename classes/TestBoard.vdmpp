@@ -1,0 +1,39 @@
+class TestBoard
+
+operations
+
+public AssertTrue: bool ==> ()
+AssertTrue(a) == return
+pre a;
+
+public TestMove: () ==> ()
+TestMove() == 
+(
+	dcl b1: Board := Board`getInstance();
+	
+	AssertTrue(isofclass(Pawn,b1.getCell(1,3).piece));
+	AssertTrue(b1.getCell(1,3).piece.validMovement(b1.getCell(1,3),b1.getCell(1,4)));
+	AssertTrue(b1.turn = <White>);
+	
+	b1.move(b1.getCell(1,3),b1.getCell(1,4));
+	
+	AssertTrue(b1.turn = <Black>);
+	
+	AssertTrue(isofclass(Pawn,b1.getCell(1,7).piece));
+	
+	b1.move(b1.getCell(1,7),b1.getCell(1,6));
+	b1.move(b1.getCell(1,4),b1.getCell(1,5));
+	
+	AssertTrue(card b1.getCapturedPieces() = 0);
+	
+	b1.move(b1.getCell(1,6),b1.getCell(1,5));
+	
+	AssertTrue(card b1.getCapturedPieces() = 1);
+	
+	b1.move(b1.getCell(1,1),b1.getCell(1,5));
+	
+	AssertTrue(card b1.getCapturedPieces() = 2);
+	
+)
+
+end TestBoard
