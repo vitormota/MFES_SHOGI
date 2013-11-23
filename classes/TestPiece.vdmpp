@@ -1,0 +1,32 @@
+class TestPiece
+
+operations
+public AssertTrue: bool ==> ()
+AssertTrue(a) == return
+pre a;
+
+public TestPromoteKing:()==>()
+TestPromoteKing() ==
+(
+	dcl king:Piece := new King(<White>);
+	king.promote();
+);
+
+public TestPromoteGoldGeneral:()==>()
+TestPromoteGoldGeneral()==
+(
+	dcl gg:Piece := new GoldGeneral(<White>);
+	gg.promote();
+);
+
+public TestPromotePawn:() ==> ()
+TestPromotePawn()==
+(
+	dcl p:Piece := new Pawn(<White>);
+	p.promote();
+	
+	AssertTrue(p.getPromoted() = true);
+	p.promote();
+)
+
+end TestPiece

@@ -1,24 +1,16 @@
 class Lance is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public Lance: Player ==> Lance
 Lance(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return c1.x = c2.x and 
-															   exists y in set {1,...,8} & 
-															   (y > 0 and c1.y = c2.y + y * direction() and 
-															   not exists yi in set {1,...,y} &
-															   (yi < y)
-															   ); --Falta ver se passa por cima de alguma peca
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+validMovement(c1,c2) == if promoted then return validGoldGeneralMove(c1,c2)
+												else return c1.x = c2.x and 
+													   exists y in set {1,...,8} & 
+													   (c1.y = c2.y + y * direction() and
+													   forall yi in set ({c2.y+direction(),...,c2.y+(y-1)*direction()} union {c2.y+(y-1)*direction(),...,c2.y+direction()}) &
+													   (Board`getInstance().getCell(c1.x,yi).piece = nil) 
+													   ); 
 end Lance

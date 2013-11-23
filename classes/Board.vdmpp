@@ -89,7 +89,7 @@ mapStartSeq(s, x, y) ==
 )
 pre y > 0 and y < 10 and x > 0 and x < 10 and len s = 10 - x; 
 
-private zone: nat1 -> Player
+private zone: nat1 -> [Player]
 zone(y) == 
 (
 	if y < 4 then <White>

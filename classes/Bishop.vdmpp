@@ -1,19 +1,16 @@
 class Bishop is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public Bishop: Player ==> Bishop
 Bishop(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return abs(c1.x - c2.x) = abs(c1.y - c2.y); 
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+	validMovement(c1,c2) == return abs(c1.x - c2.x) = abs(c1.y - c2.y) and 
+																 forall xi in set intermediateVals(c1.x,c2.x), 
+																 			  yi in set intermediateVals(c1.y,c2.y) &
+																 ( abs(c1.x - xi) = abs(c1.y - yi) and 
+																   Board`getInstance().getCell(xi,yi).piece = nil ) or
+																 ( promoted and validKingMove(c1,c2)); 
+
 end Bishop
