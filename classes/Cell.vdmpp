@@ -1,21 +1,33 @@
 class Cell
 types
--- TODO Define types here
-public Row = nat1
-inv r == r in set {1,...,9};
-public Column = nat1
-inv c == c in set {1,...,9};
+
+public Player = <White> | <Black>;
+
 values
 -- TODO Define values here
 instance variables
--- TODO Define instance variables here
-public y : Column;
-public x : Row;
+
+public y : nat1;
+public x : nat1;
+public piece: [Piece];
+
+inv x in set {1,...,9} and y in set {1,...,9}
 operations
 
 public Cell: nat1 * nat1 ==> Cell
-Cell(xi,yi)== (x:=xi;y:=yi)
+Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
 
+public Cell: nat1*nat1*Piece==>Cell
+Cell(xi,yi,p)==(x:=xi;y:=yi;piece:=p);
+
+public promotionZone: Player ==> bool
+promotionZone(p) ==
+	if (p = <White> and y < 4) 
+	then return true
+	elseif p = <Black> and y > 6
+	then return true
+	else return false;
+	
 functions
 -- TODO Define functiones here
 traces

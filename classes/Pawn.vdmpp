@@ -1,19 +1,12 @@
 class Pawn is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public Pawn: Player ==> Pawn
 Pawn(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-validMovement(c1,c2) == return c1.x = c2.x and c1.y = c2.y + direction(); --Falta ver se ocupada
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+validMovement(c1,c2) == if promoted then return validGoldGeneralMove(c1,c2)
+												else return c1.x = c2.x and c1.y = c2.y + direction();
+
 end Pawn

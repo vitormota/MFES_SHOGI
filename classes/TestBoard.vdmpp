@@ -1,0 +1,49 @@
+class TestBoard
+
+operations
+
+public AssertTrue: bool ==> ()
+AssertTrue(a) == return
+pre a;
+
+public TestMove: () ==> ()
+TestMove() == 
+(
+	dcl b1: Board := Board`getInstance();
+	
+	AssertTrue(isofclass(Pawn,b1.getCell(1,3).piece));
+	AssertTrue(b1.getCell(1,3).piece.validMovement(b1.getCell(1,3),b1.getCell(1,4)));
+	AssertTrue(b1.turn = <White>);
+	
+	b1.move(b1.getCell(1,3),b1.getCell(1,4));
+	
+	AssertTrue(b1.turn = <Black>);
+	
+	AssertTrue(isofclass(Pawn,b1.getCell(1,7).piece));
+	
+	b1.move(b1.getCell(1,7),b1.getCell(1,6));
+	b1.move(b1.getCell(1,4),b1.getCell(1,5));
+	
+	AssertTrue(len b1.getCapturedPieces()(<White>) = 0);
+	AssertTrue(len b1.getCapturedPieces()(<Black>) = 0);
+	
+	b1.move(b1.getCell(1,6),b1.getCell(1,5));
+	
+	AssertTrue(len b1.getCapturedPieces()(<White>) = 0);
+	AssertTrue(len b1.getCapturedPieces()(<Black>) = 1);
+	
+	b1.move(b1.getCell(1,1),b1.getCell(1,5));
+	
+	AssertTrue(len b1.getCapturedPieces()(<White>) = 1);
+	AssertTrue(len b1.getCapturedPieces()(<Black>) = 1);
+	
+	AssertTrue(b1.turn = <Black>);
+	
+	b1.dropPiece(b1.getCell(5,5), b1.getCapturedPieces()(<Black>)(1));
+	
+	AssertTrue(len b1.getCapturedPieces()(<Black>) = 0);
+	AssertTrue(b1.turn = <White>);
+	
+)
+
+end TestBoard
