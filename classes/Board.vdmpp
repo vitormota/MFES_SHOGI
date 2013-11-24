@@ -18,9 +18,10 @@ private startPositions = [
 												 ]
 instance variables
 -- TODO Define instance variables here
-private capturedPieces : set of Piece;
+private capturedPieces : map Player to seq of Piece;
 private lines: map nat1 to BoardLine;
 public turn: Player;
+public gameEnded: bool;
 
 
 inv card(dom(lines)) = 9 and dom(lines) = {1,...,9};
@@ -33,8 +34,9 @@ protected Board: () ==> Board
 Board() == 
 (
 	lines:= {y |-> new BoardLine( mapStartSeq(startPositions(y), 1, y), y ) | y in set {1,...,9}};
-	capturedPieces := {};
+	capturedPieces := {<White>|->[], <Black>|->[]};
 	turn:= <White>;
+	gameEnded:=false;
 );
 
 public static getInstance: () ==> Board
@@ -47,18 +49,19 @@ public dropPiece: Cell*Piece ==> ()
 dropPiece(c,p) == 
 (
 	c.piece:= p;
-	capturedPieces:= capturedPieces \ {p};
+	capturedPieces:= capturedPieces ++ {turn |-> capturedPieces(turn)(1,...,getIndex[Piece](p,capturedPieces(turn))-1) ^
+																							 capturedPieces(turn)(getIndex[Piece](p,capturedPieces(turn)) + 1,...,len capturedPieces(turn))};
 	
 	if turn = <White> then turn := <Black> else turn := <White> 
 )
-pre c.piece = nil and p in set capturedPieces --Falta verificar condições mais complexas referentes a checkmates e pawns
-post p not in set capturedPieces and c.piece = p and turn <> turn~; 
+pre c.piece = nil and p in set elems(capturedPieces(turn)) --Falta verificar condições mais complexas referentes a checkmates e pawns
+post p not in set elems(capturedPieces(turn)) and c.piece = p and turn <> turn~; 
 
 public move: Cell*Cell ==> ()
 move(c1,c2) == 
 (
 	if c2.piece <> nil 
-	then capturedPieces:= capturedPieces union {c2.piece}; --mudar player
+	then (c2.piece.capture(); capturedPieces:= capturedPieces ++ {turn |-> capturedPieces(turn) ^ [c2.piece]}; );
 	
 	c2.piece:= c1.piece;
 	c1.piece:= nil;
@@ -69,10 +72,50 @@ pre c1 = getCell(c1.x, c1.y) and c2 = getCell(c2.x,c2.y) and c1.piece <> nil and
 post c1.piece = nil and turn <> turn~;
 
 
-public getCapturedPieces: () ==> set of Piece
+public getCapturedPieces: () ==> map Player to seq of Piece
 getCapturedPieces() == return capturedPieces;
 
+public check: Player ==> bool
+check(p) == if exists c in set getAllCellsFromPlayer(getOtherPlayer(p),1) & c.piece.validMovement(c,getKingFromPlayer(p))
+						then return true
+						else return false;
+
+public endGame:()==>()
+endGame() == gameEnded:=true
+pre check(turn) and not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c)
+post gameEnded=true;
+
+private getAllEmptyCells: nat1 ==> set of Cell
+getAllEmptyCells(y) ==
+(
+	if y = 9 then return lines(y).getEmptyCells()
+	else return lines(y).getEmptyCells() union getAllEmptyCells(y+1);
+);
+ 
+public getAllCellsFromPlayer: Player*nat1 ==> set of Cell
+getAllCellsFromPlayer(p,y) ==
+(
+	if y = 9 then return lines(y).getCells(p)
+	else return lines(y).getCells(p) union getAllCellsFromPlayer(p,y+1);
+);
+
+public getKingFromPlayer: Player ==> Cell
+getKingFromPlayer(p) ==
+(
+	let c in set getAllCellsFromPlayer(p,1) be st isofclass(King,c.piece) 
+	in return c;
+)
+
 functions
+
+private static getOtherPlayer: Player -> Player
+getOtherPlayer(p) == if p = <White> then <Black> else <White>;
+
+public static getIndex[@T]: @T * seq of @T -> nat1
+getIndex(t,s) == let n in set inds(s) be st s(n) = t in n
+pre exists1 n in set inds(s) & s(n) = t;
+
+
 private mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
 mapStartSeq(s, x, y) ==
 (

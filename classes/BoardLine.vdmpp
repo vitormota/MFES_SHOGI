@@ -1,5 +1,6 @@
 class BoardLine
 types
+public Player = <White> | <Black>;
 
 public Line = map nat1 to Cell
 inv l == card(dom(l)) = 9 and dom(l) = {1,...,9};
@@ -26,6 +27,12 @@ public getCell: nat1 ==> Cell
 getCell(r) == return line(r)
 pre r in set dom(line)
 post line = line~;
+
+public getCells: Player ==> set of Cell
+getCells(p) == return { c | c in set rng line & c.piece <> nil and c.piece.belongTo = p };
+
+public getEmptyCells:() ==> set of Cell
+getEmptyCells() == return { c | c in set rng line & c.piece = nil };
 
 functions
 
