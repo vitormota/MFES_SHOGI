@@ -19,6 +19,7 @@ TestMove() ==
 	
 	AssertTrue(b1.turn = <Black>);
 	
+	
 	AssertTrue(isofclass(Pawn,b1.getCell(1,7).piece));
 	
 	b1.move(b1.getCell(1,7),b1.getCell(1,6));
