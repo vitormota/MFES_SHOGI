@@ -1,20 +1,17 @@
 class Rook is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public Rook: Player ==> Rook
 Rook(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) <> 0 ) or
-																 (abs(c1.x-c2.x) <> 0 and abs(c1.y-c2.y) = 0 ); 
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+	validMovement(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) <> 0 and
+																	forall yi in set intermediateVals(c1.y,c2.y) &
+																	Board`getInstance().getCell(c1.x,yi).piece = nil ) or --Vertical
+																 (abs(c1.x-c2.x) <> 0 and abs(c1.y-c2.y) = 0 and
+																  forall xi in set intermediateVals(c1.x,c2.x) &
+																  Board`getInstance().getCell(c1.y,xi).piece = nil) or  --Horizontal
+																  (promoted and validKingMove(c1,c2));
+
 end Rook

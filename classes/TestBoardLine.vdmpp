@@ -18,7 +18,7 @@ TestBoardLineContructor() ==
 	dcl c7:Cell := new Cell(7,1);
 	dcl c8:Cell := new Cell(8,1);
 	dcl c9:Cell := new Cell(9,1);
-	dcl b: BoardLine:= new BoardLine({c1,c2,c3,c4,c5,c6,c7,c8,c9},1);
+	dcl b: BoardLine:= new BoardLine([c1,c2,c3,c4,c5,c6,c7,c8,c9],1);
 	
 	AssertTrue(b.getCell(1).x = 1);
 )

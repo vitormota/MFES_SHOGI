@@ -1,21 +1,12 @@
 class King is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public King: Player ==> King
 King(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-validMovement(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) = 1 ) or
-																 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 0 ) or
-																 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 1 ); 
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+validMovement(c1,c2) == return validKingMove(c1,c2)
+pre not Board`getInstance().check(belongTo);
+
 end King
