@@ -13,7 +13,7 @@ public Cell: nat1 * nat1 ==> Cell
 Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
 
 public Cell: nat1*nat1*Piece==>Cell
-Cell(xi,yi,p)==(x:=xi;y:=yi;piece:=p);
+Cell(xi,yi,p)==(atomic(x:=xi;y:=yi);piece:=p);
 
 public promotionZone: Board`Player ==> bool
 promotionZone(p) ==
@@ -23,5 +23,4 @@ promotionZone(p) ==
 	then return true
 	else return false;
 	
-
 end Cell

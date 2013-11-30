@@ -6,7 +6,7 @@ public King: Player ==> King
 King(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-validMovement(c1,c2) == return validKingMove(c1,c2)
-pre not Board`getInstance().check(belongTo,c2);
+validMovement(c1,c2) == return validKingMove(c1,c2) and 
+															 not Board`getInstance().check(belongTo,c2);
 
 end King

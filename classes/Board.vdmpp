@@ -1,6 +1,7 @@
 class Board
 types
-public PieceType = <LANCE> | <BISHOP> | <GOLDGENERAL> | <SILVERGENERAL> | <KING> | <KNIGHT> | <PAWN> | <ROOK> |
+public PieceType = <LANCEW> | <BISHOPW> | <GOLDGENERALW> | <SILVERGENERALW> | <KINGW> | <KNIGHTW> | <PAWNW> | <ROOKW> |
+									 <LANCEB> | <BISHOPB> | <GOLDGENERALB> | <SILVERGENERALB> | <KINGB> | <KNIGHTB> | <PAWNB> | <ROOKB> |
                    <NONE>;
                    
 public Player = <White> | <Black>;
@@ -8,15 +9,15 @@ public Player = <White> | <Black>;
 private GameState = <WhiteWins> | <BlackWins> | <Playing>;
 values
 private startPositions = [
-													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>],
-													 [<NONE>,  <BISHOP>, <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <ROOK>,  <NONE> ],
-													 [<PAWN>,  <PAWN>,   <PAWN>,          <PAWN>,        <PAWN>, <PAWN>,        <PAWN>,          <PAWN>,  <PAWN> ],
-													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
-													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
-													 [<NONE>,  <NONE>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <NONE>,  <NONE> ],
-													 [<PAWN>,  <PAWN>,   <PAWN>,          <PAWN>,        <PAWN>, <PAWN>,        <PAWN>,          <PAWN>,  <PAWN> ],
-													 [<NONE>,  <ROOK>,   <NONE>,          <NONE>,        <NONE>, <NONE>,        <NONE>,          <BISHOP>,<NONE> ],
-													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>]
+													 [<LANCEW>, <KNIGHTW>, <SILVERGENERALW>, <GOLDGENERALW>, <KINGW>, <GOLDGENERALW>, <SILVERGENERALW>, <KNIGHTW>,<LANCEW>],
+													 [<NONE>,   <BISHOPW>, <NONE>,           <NONE>,         <NONE>,  <NONE>,         <NONE>,           <ROOKW>,  <NONE> ],
+													 [<PAWNW>,  <PAWNW>,   <PAWNW>,          <PAWNW>,        <PAWNW>, <PAWNW>,        <PAWNW>,          <PAWNW>,  <PAWNW> ],
+													 [<NONE>,   <NONE>,    <NONE>,           <NONE>,         <NONE>,  <NONE>,         <NONE>,           <NONE>,   <NONE> ],
+													 [<NONE>,   <NONE>,    <NONE>,           <NONE>,         <NONE>,  <NONE>,         <NONE>,           <NONE>,   <NONE> ],
+													 [<NONE>,   <NONE>,    <NONE>,           <NONE>,         <NONE>,  <NONE>,         <NONE>,           <NONE>,   <NONE> ],
+													 [<PAWNB>,  <PAWNB>,   <PAWNB>,          <PAWNB>,        <PAWNB>, <PAWNB>,        <PAWNB>,          <PAWNB>,  <PAWNB> ],
+													 [<NONE>,   <ROOKB>,   <NONE>,           <NONE>,         <NONE>,  <NONE>,         <NONE>,           <BISHOPB>,<NONE> ],
+													 [<LANCEB>, <KNIGHTB>, <SILVERGENERALB>, <GOLDGENERALB>, <KINGB>, <GOLDGENERALB>, <SILVERGENERALB>, <KNIGHTB>,<LANCEB>]
 												 ]
 instance variables
 
@@ -24,7 +25,7 @@ private capturedPieces : map Player to seq of Piece;
 private lines: map nat1 to BoardLine;
 public turn: Player;
 private gameState : GameState;
-private allMoves: seq of BoardState;
+public allMoves: seq of BoardState;
 
 inv card(dom(lines)) = 9 and dom(lines) = {1,...,9};
 
@@ -74,6 +75,8 @@ move(c1,c2) ==
 	
 	c2.piece:= c1.piece;
 	c1.piece:= nil;
+	
+	allMoves := allMoves ^ [new BoardState(getCurrentState(1),capturedPieces,turn)];
 	
 	if turn = <White> then turn := <Black> else turn := <White>;
 	
@@ -140,6 +143,41 @@ getKingFromPlayer(p) ==
 )
 post RESULT = getCell(RESULT.x,RESULT.y);
 
+
+public static getCurrentState: nat1 ==> seq of (seq of PieceType)
+getCurrentState(y) ==
+(
+	if y = 9 then return [getCurrentStateLine(Board`getInstance().getLines()(y).getSeqCells(),1,y)]
+	else return [getCurrentStateLine(Board`getInstance().getLines()(y).getSeqCells(),1,y)] ^ getCurrentState(y+1)
+)
+pre y in set {1,...,9};
+
+private static getCurrentStateLine: seq of Cell*nat1*nat1 ==> seq of PieceType
+getCurrentStateLine(line,x,y) == 
+(
+	if line = [] then return []
+	elseif (hd line).piece<>nil and isofclass(Lance,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<LANCEW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Knight,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<KNIGHTW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(SilverGeneral,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<SILVERGENERALW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(GoldGeneral,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<GOLDGENERALW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(King,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<KINGW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Bishop,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<BISHOPW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Rook,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<ROOKW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Pawn,(hd line).piece) and (hd line).piece.belongTo = <White>  then return [<PAWNW>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Lance,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<LANCEB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Knight,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<KNIGHTB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(SilverGeneral,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<SILVERGENERALB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(GoldGeneral,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<GOLDGENERALB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(King,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<KINGB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Bishop,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<BISHOPB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Rook,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<ROOKB>] ^ getCurrentStateLine(tl line, x+1, y)
+	elseif (hd line).piece<>nil and isofclass(Pawn,(hd line).piece) and (hd line).piece.belongTo = <Black>  then return [<PAWNB>] ^ getCurrentStateLine(tl line, x+1, y)
+	else return [<NONE>] ^ getCurrentStateLine(tl line, x+1, y)
+)
+pre y > 0 and y < 10 and x > 0 and (x < 10 or (x=10 and line = [] )); 
+
+
+
 functions
 
 private static getOtherPlayer: Player -> Player
@@ -156,17 +194,25 @@ public static mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
 mapStartSeq(s, x, y) ==
 (
 	if s = [] then []
-	elseif hd s = <LANCE> then [new Cell(x,y,new Lance(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <KNIGHT> then [new Cell(x,y,new Knight(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <SILVERGENERAL> then [new Cell(x,y,new SilverGeneral(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <GOLDGENERAL> then [new Cell(x,y,new GoldGeneral(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <KING> then [new Cell(x,y,new King(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <BISHOP> then [new Cell(x,y,new Bishop(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <ROOK> then [new Cell(x,y,new Rook(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
-	elseif hd s = <PAWN> then [new Cell(x,y,new Pawn(zone(y)))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <LANCEB> then [new Cell(x,y,new Lance(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KNIGHTB> then [new Cell(x,y,new Knight(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <SILVERGENERALB> then [new Cell(x,y,new SilverGeneral(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <GOLDGENERALB> then [new Cell(x,y,new GoldGeneral(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KINGB> then [new Cell(x,y,new King(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <BISHOPB> then [new Cell(x,y,new Bishop(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <ROOKB> then [new Cell(x,y,new Rook(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <PAWNB> then [new Cell(x,y,new Pawn(<Black>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <LANCEW> then [new Cell(x,y,new Lance(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KNIGHTW> then [new Cell(x,y,new Knight(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <SILVERGENERALW> then [new Cell(x,y,new SilverGeneral(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <GOLDGENERALW> then [new Cell(x,y,new GoldGeneral(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <KINGW> then [new Cell(x,y,new King(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <BISHOPW> then [new Cell(x,y,new Bishop(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <ROOKW> then [new Cell(x,y,new Rook(<White>))] ^ mapStartSeq(tl s, x+1, y)
+	elseif hd s = <PAWNW> then [new Cell(x,y,new Pawn(<White>))] ^ mapStartSeq(tl s, x+1, y)
 	else [new Cell(x,y)] ^ mapStartSeq(tl s, x+1, y)
 )
-pre y > 0 and y < 10 and x > 0 and x < 10 and len s = 10 - x; 
+pre y > 0 and y < 10 and x > 0 and (x < 10 or (x=10 and s = [])) and len s = 10 - x; 
 
 private static zone: nat1 -> [Player]
 zone(y) == 

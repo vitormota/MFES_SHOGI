@@ -13,7 +13,8 @@ Knight(p) == Piece(p);
 public validMovement: Cell*Cell ==> bool
 	validMovement(c1,c2) == if promoted then return validGoldGeneralMove(c1,c2)
 													else return (c1.x = c2.x+1 or c1.x =c2.x-1) and 
-																 c1.y = c2.y + 2*direction(); 
+																      c1.y = c2.y + 2*direction() and
+																 			(c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo)); 
 functions
 -- TODO Define functiones here
 traces

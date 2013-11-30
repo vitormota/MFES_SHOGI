@@ -34,6 +34,18 @@ getCells(p) == return { c | c in set rng line & c.piece <> nil and c.piece.belon
 public getEmptyCells:() ==> set of Cell
 getEmptyCells() == return { c | c in set rng line & c.piece = nil };
 
+public getSeqCells: () ==> seq of Cell
+getSeqCells() == return getSeqCellsAux(1);
+
+private getSeqCellsAux: nat1 ==> seq of Cell
+getSeqCellsAux(x) == 
+(
+	if x = 9 then return [line(x)]
+	else return [line(x)] ^ getSeqCellsAux(x+1); 
+)
+pre x in set {1,...,9};
+
+
 functions
 
 traces

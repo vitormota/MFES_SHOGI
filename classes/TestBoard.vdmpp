@@ -1,5 +1,10 @@
 class TestBoard
 
+instance variables
+
+private player : Board`Player := <White>;
+private piece : Piece;
+
 operations
 
 public AssertTrue: bool ==> ()
@@ -43,7 +48,466 @@ TestMove() ==
 	
 	AssertTrue(len b1.getCapturedPieces()(<Black>) = 0);
 	AssertTrue(b1.turn = <White>);
-	
-)
+);
+
+-------------------------------------------------
+--------------------LANCE TEST-------------------
+-------------------------------------------------
+
+public testCreateLance : () ==> ()
+testCreateLance() ==(
+	piece := new Lance(player);
+);
+
+private testValidMovLance: Cell*Cell ==> bool
+testValidMovLance(c1,c2) == 
+(
+	piece := new Lance(player);
+	return (piece.validMovement(c1,c2));
+);
+
+--PASS
+public testLanceTop: nat1 ==>()
+testLanceTop(y)==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,2+y);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--FAIL
+public testLanceRight: nat1 ==>()
+testLanceRight(x)==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2+x,2);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--FAIL
+public testLanceLeft: nat1 ==>()
+testLanceLeft(x)==
+(
+	dcl c1:Cell := new Cell(6,2);
+	dcl c2:Cell := new Cell(6-x,2);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--FAIL
+public testLanceBack: nat1 ==>()
+testLanceBack(y)==
+(
+	dcl c1:Cell := new Cell(2,5);
+	dcl c2:Cell := new Cell(2,5-y);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--FAIL
+public testLanceBackR: nat1 * nat1 ==>()
+testLanceBackR(x,y)==
+(
+	dcl c1:Cell := new Cell(2,5);
+	dcl c2:Cell := new Cell(2+x,5-y);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--FAIL
+public testLanceBackL: nat1 * nat1 ==>()
+testLanceBackL(x,y)==
+(
+	dcl c1:Cell := new Cell(5,5);
+	dcl c2:Cell := new Cell(5-x,5-y);
+	AssertTrue(testValidMovLance(c1,c2));
+);
+
+--User defined movement
+public testLanceArbitraryMove: Cell*Cell ==> ()
+testLanceArbitraryMove(ori,dest)==
+(
+	AssertTrue(testValidMovLance(ori,dest));
+);
+
+--------------------END LANCE--------------------
+
+-------------------------------------------------
+--------------------KNIGHT TEST------------------
+-------------------------------------------------
+
+public testCreateKnight : () ==> ()
+testCreateKnight() ==(
+	piece := new Knight(player);
+);
+
+private testValidMovKnight: Cell*Cell ==> bool
+testValidMovKnight(c1,c2) == 
+(
+	piece := new Knight(player);
+	return (piece.validMovement(c1,c2));
+);
+
+--PASS
+public testKnightRightT:()==>()
+testKnightRightT()==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,4);
+	AssertTrue(testValidMovKnight(c1,c2));
+);
+
+--PASS
+public testKnightLeftT:()==>()
+testKnightLeftT()==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,4);
+	AssertTrue(testValidMovKnight(c1,c2));
+);
+
+--FAIL
+public testKnightLeftB:()==>()
+testKnightLeftB()==
+(
+	dcl c1:Cell := new Cell(2,3);
+	dcl c2:Cell := new Cell(3,1);
+	AssertTrue(testValidMovKnight(c1,c2));
+);
+
+--FAIL
+public testKnightRightB:()==>()
+testKnightRightB()==
+(
+	dcl c1:Cell := new Cell(2,3);
+	dcl c2:Cell := new Cell(1,1);
+	AssertTrue(testValidMovKnight(c1,c2));
+);
+
+--User defined movement
+public testKnightArbitraryMove: Cell*Cell ==> ()
+testKnightArbitraryMove(ori,dest)==
+(
+	AssertTrue(testValidMovKnight(ori,dest));
+);
+
+--------------------END KNIGHT-------------------
+
+
+-------------------------------------------------
+--------------------KING TEST--------------------
+-------------------------------------------------
+
+public testCreateKing : () ==> ()
+testCreateKing() ==(
+	piece := new King(player);
+);
+
+private testValidMovKing: Cell*Cell ==> bool
+testValidMovKing(c1,c2) == 
+(
+	piece := new King(player);
+	return (piece.validMovement(c1,c2));
+);
+
+--PASS
+public testKingTop: () ==> ()
+testKingTop() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,3);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--FAIL
+public testKingDoubleTop: () ==> ()
+testKingDoubleTop() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,4);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--PASS
+public testKingBack: () ==> ()
+testKingBack() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,1);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--PASS
+public testKingRightB: () ==> ()
+testKingRightB() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,1);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--PASS
+public testKingLeftB: () ==> ()
+testKingLeftB() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,1);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+
+--PASS
+public testKingLeftT: () ==> ()
+testKingLeftT() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,3);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--PASS
+public testKingRightT: () ==> ()
+testKingRightT() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,3);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--PASS
+public testKingLeft: () ==> ()
+testKingLeft() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,2);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--PASS
+public testKingRight: () ==> ()
+testKingRight() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,2);
+	AssertTrue(testValidMovKing(c1,c2));
+);
+
+--User defined movement
+public testKingArbitraryMove: Cell*Cell ==> ()
+testKingArbitraryMove(ori,dest)==
+(
+	AssertTrue(testValidMovKing(ori,dest));
+);
+
+--------------------END KING---------------------
+
+-------------------------------------------------
+--------------------PAWN TEST--------------------
+-------------------------------------------------
+
+public testCreatePawn : () ==> ()
+testCreatePawn() ==(
+	piece := new Rook(player);
+);
+
+private testValidMovPawn: Cell*Cell ==> bool
+testValidMovPawn(c1,c2) == 
+(
+	piece := new Pawn(player);
+	return (piece.validMovement(c1,c2));
+);
+
+--PASS
+public testPawnTop: () ==> ()
+testPawnTop() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,3);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnDoubleTop: () ==> ()
+testPawnDoubleTop() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,4);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnBack: () ==> ()
+testPawnBack() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,1);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnRightB: () ==> ()
+testPawnRightB() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,1);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnLeftB: () ==> ()
+testPawnLeftB() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,1);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+
+--FAIL
+public testPawnLeftT: () ==> ()
+testPawnLeftT() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,3);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnRightT: () ==> ()
+testPawnRightT() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,3);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnLeft: () ==> ()
+testPawnLeft() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,2);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--FAIL
+public testPawnRight: () ==> ()
+testPawnRight() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,2);
+	AssertTrue(testValidMovPawn(c1,c2));
+);
+
+--User defined movement
+public testPawnArbitraryMove: Cell*Cell ==> ()
+testPawnArbitraryMove(ori,dest)==
+(
+	AssertTrue(testValidMovPawn(ori,dest));
+);
+
+--------------------END PAWN---------------------
+
+-------------------------------------------------
+--------------------ROOK TEST--------------------
+-------------------------------------------------
+
+public testCreateRook : () ==> ()
+testCreateRook() ==(
+	piece := new Rook(player);
+);
+
+private testValidMovRook: Cell*Cell ==> bool
+testValidMovRook(c1,c2) == 
+(
+	piece := new Rook(player);
+	return (piece.validMovement(c1,c2));
+);
+
+------------------------------
+--D - diagonal
+--T - top
+--L - left
+--R - right
+------------------------------
+
+--FAIL
+public mvRookDTL: () ==> ()
+mvRookDTL() == 
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,3);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--FAIL
+public mvRookDTR: () ==> ()
+mvRookDTR() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,3);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--FAIL
+public mvRookDBL: ()==> ()
+mvRookDBL()==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(1,1);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--FAIL
+public mvRookDBR: ()==> ()
+mvRookDBR()==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(3,1);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--PASS
+public mvRookTop: () ==> ()
+mvRookTop() == 
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,6);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--PASS
+public mvRookBack: () ==> ()
+mvRookBack() ==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(2,1);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--PASS
+public mvRookLeft: ()==> ()
+mvRookLeft()==
+(
+	dcl c1:Cell := new Cell(4,4);
+	dcl c2:Cell := new Cell(1,4);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--PASS
+public mvRookRight: ()==> ()
+mvRookRight()==
+(
+	dcl c1:Cell := new Cell(2,2);
+	dcl c2:Cell := new Cell(7,2);
+	AssertTrue(testValidMovRook(c1,c2));
+);
+
+--User defined movement
+public testRookArbitraryMove: Cell*Cell ==> ()
+testRookArbitraryMove(ori,dest)==
+(
+	AssertTrue(testValidMovRook(ori,dest));
+);
+
+-----------------END ROOK--------------------
+
 
 end TestBoard

@@ -3,7 +3,7 @@ class BoardState
 instance variables
 
 private capturedPieces : map Board`Player to seq of Piece;
-private lines: map nat1 to BoardLine;
+public lines: map nat1 to BoardLine;
 public turn: Board`Player;
 
 operations
@@ -12,6 +12,7 @@ public BoardState: seq of (seq of Board`PieceType)*map Board`Player to seq of Pi
 BoardState(state, captured, t) == 
 (
 	lines := {y |-> new BoardLine( Board`mapStartSeq(state(y), 1, y), y ) | y in set {1,...,9}};
+	capturedPieces:={|->};
 	capturedPieces:= capturedPieces ++ captured;
 	if t = <White> then turn:= <White> else turn:= <Black>
 );
