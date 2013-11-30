@@ -64,7 +64,7 @@ dropPiece(c,p) ==
 	
 	if turn = <White> then turn := <Black> else turn := <White> 
 )
-pre c.piece = nil and p in set elems(capturedPieces(turn)) --Falta verificar condições mais complexas referentes a checkmates e pawns
+pre c.piece = nil and p in set elems(capturedPieces(turn)) and not existsPawnInColumn(c,p) and not checkIfPawnDroppedCheck(c,p)
 post p not in set elems(capturedPieces(turn)) and c.piece = p and turn <> turn~; 
 
 public move: Cell*Cell ==> ()
@@ -177,6 +177,31 @@ getCurrentStateLine(line,x,y) ==
 pre y > 0 and y < 10 and x > 0 and (x < 10 or (x=10 and line = [] )); 
 
 
+private existsPawnInColumn: Cell*Piece ==> bool
+existsPawnInColumn(c,p) == return isofclass(Pawn,p) and 
+																	exists y in set {1,...,9} &(
+																		getCell(c.x,y).piece <>  nil and
+																		isofclass(Pawn, getCell(c.x,y).piece) and 
+																		getCell(c.x,y).piece.belongTo = p.belongTo);
+																		
+private checkIfPawnDroppedCheck: Cell*Piece ==> bool
+checkIfPawnDroppedCheck(c,p) == 
+(
+	dcl ret:bool;
+	if not isofclass(Pawn,p) then return true
+	else
+	(
+		c.piece:= p;
+		if turn = <White> then turn := <Black> else turn := <White>;
+		
+		ret := endGame();
+		
+		c.piece:= nil;
+		if turn = <White> then turn := <Black> else turn := <White>;
+		
+		return ret;
+	)
+)
 
 functions
 
