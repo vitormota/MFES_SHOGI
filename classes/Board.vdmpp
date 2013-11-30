@@ -4,6 +4,8 @@ public PieceType = <LANCE> | <BISHOP> | <GOLDGENERAL> | <SILVERGENERAL> | <KING>
                    <NONE>;
                    
 public Player = <White> | <Black>;
+
+private GameState = <WhiteWins> | <BlackWins> | <Playing>;
 values
 private startPositions = [
 													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>],
@@ -17,12 +19,12 @@ private startPositions = [
 													 [<LANCE>, <KNIGHT>, <SILVERGENERAL>, <GOLDGENERAL>, <KING>, <GOLDGENERAL>, <SILVERGENERAL>, <KNIGHT>,<LANCE>]
 												 ]
 instance variables
--- TODO Define instance variables here
+
 private capturedPieces : map Player to seq of Piece;
 private lines: map nat1 to BoardLine;
 public turn: Player;
-public gameEnded: bool;
-
+private gameState : GameState;
+private allMoves: seq of BoardState;
 
 inv card(dom(lines)) = 9 and dom(lines) = {1,...,9};
 
@@ -36,14 +38,21 @@ Board() ==
 	lines:= {y |-> new BoardLine( mapStartSeq(startPositions(y), 1, y), y ) | y in set {1,...,9}};
 	capturedPieces := {<White>|->[], <Black>|->[]};
 	turn:= <White>;
-	gameEnded:=false;
+	gameState:= <Playing>;
+	allMoves:= [];
 );
+
+public getLines: () ==> map nat1 to BoardLine
+getLines() == return lines
+post lines = lines~;
 
 public static getInstance: () ==> Board
 getInstance() == return board;
 
 public getCell: nat1*nat1 ==> Cell
-getCell(x,y) == return lines(y).getCell(x);
+getCell(x,y) == return lines(y).getCell(x)
+pre x in set {1,...,9} and y in set {1,...,9}
+post lines(y) = lines~(y);
 
 public dropPiece: Cell*Piece ==> ()
 dropPiece(c,p) == 
@@ -66,38 +75,62 @@ move(c1,c2) ==
 	c2.piece:= c1.piece;
 	c1.piece:= nil;
 	
-	if turn = <White> then turn := <Black> else turn := <White> 
+	if turn = <White> then turn := <Black> else turn := <White>;
+	
+	if endGame() 
+	then 
+	(
+		if turn = <White> then gameState:= <BlackWins> else gameState:=<WhiteWins>;
+	);
 )
-pre c1 = getCell(c1.x, c1.y) and c2 = getCell(c2.x,c2.y) and c1.piece <> nil and c1.piece.validMovement(c1,c2) and c1.piece.belongTo = turn
+pre c1 = getCell(c1.x, c1.y) and c2 = getCell(c2.x,c2.y) and c1.piece <> nil and c1.piece.validMovement(c1,c2) 
+    and c1.piece.belongTo = turn and gameState = <Playing>
 post c1.piece = nil and turn <> turn~;
 
 
 public getCapturedPieces: () ==> map Player to seq of Piece
-getCapturedPieces() == return capturedPieces;
+getCapturedPieces() == return capturedPieces
+post capturedPieces = capturedPieces~;
 
+--Verifica p esta em check
 public check: Player ==> bool
 check(p) == if exists c in set getAllCellsFromPlayer(getOtherPlayer(p),1) & c.piece.validMovement(c,getKingFromPlayer(p))
 						then return true
-						else return false;
+						else return false
+post turn = turn~;
+						
+public check: Player*Cell ==> bool
+check(p,t) == if exists c in set getAllCellsFromPlayer(getOtherPlayer(p),1) & c.piece.validMovement(c,t)
+						  then return true
+						  else return false
+pre t = getCell(t.x,t.y)
+post turn = turn~;
 
-public endGame:()==>()
-endGame() == gameEnded:=true
-pre check(turn) and not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c)
-post gameEnded=true;
+--Verifica se jogador atual perdeu jogo
+public endGame:()==>bool
+endGame() == if check(turn) and 
+								not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c)
+						 then return true
+						 else return false
+post turn = turn~;
 
 private getAllEmptyCells: nat1 ==> set of Cell
 getAllEmptyCells(y) ==
 (
 	if y = 9 then return lines(y).getEmptyCells()
 	else return lines(y).getEmptyCells() union getAllEmptyCells(y+1);
-);
+)
+pre y in set {1,...,9}
+post lines(y) = lines~(y);
  
 public getAllCellsFromPlayer: Player*nat1 ==> set of Cell
 getAllCellsFromPlayer(p,y) ==
 (
 	if y = 9 then return lines(y).getCells(p)
 	else return lines(y).getCells(p) union getAllCellsFromPlayer(p,y+1);
-);
+)
+pre y in set {1,...,9}
+post lines(y) = lines~(y);
 
 public getKingFromPlayer: Player ==> Cell
 getKingFromPlayer(p) ==
@@ -105,18 +138,21 @@ getKingFromPlayer(p) ==
 	let c in set getAllCellsFromPlayer(p,1) be st isofclass(King,c.piece) 
 	in return c;
 )
+post RESULT = getCell(RESULT.x,RESULT.y);
 
 functions
 
 private static getOtherPlayer: Player -> Player
-getOtherPlayer(p) == if p = <White> then <Black> else <White>;
+getOtherPlayer(p) == if p = <White> then <Black> else <White>
+post RESULT <> p;
 
 public static getIndex[@T]: @T * seq of @T -> nat1
 getIndex(t,s) == let n in set inds(s) be st s(n) = t in n
-pre exists1 n in set inds(s) & s(n) = t;
+pre exists1 n in set inds(s) & s(n) = t
+post t = s(RESULT);
 
 
-private mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
+public static mapStartSeq: seq of PieceType*nat1*nat1 -> seq of Cell
 mapStartSeq(s, x, y) ==
 (
 	if s = [] then []
@@ -132,12 +168,13 @@ mapStartSeq(s, x, y) ==
 )
 pre y > 0 and y < 10 and x > 0 and x < 10 and len s = 10 - x; 
 
-private zone: nat1 -> [Player]
+private static zone: nat1 -> [Player]
 zone(y) == 
 (
 	if y < 4 then <White>
 	elseif y > 6 then <Black>
 	else nil 
-);
+)
+pre y in set {1,...,9};
 
 end Board
