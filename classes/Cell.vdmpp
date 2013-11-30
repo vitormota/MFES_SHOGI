@@ -1,10 +1,5 @@
 class Cell
-types
 
-public Player = <White> | <Black>;
-
-values
--- TODO Define values here
 instance variables
 
 public y : nat1;
@@ -18,9 +13,9 @@ public Cell: nat1 * nat1 ==> Cell
 Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
 
 public Cell: nat1*nat1*Piece==>Cell
-Cell(xi,yi,p)==(x:=xi;y:=yi;piece:=p);
+Cell(xi,yi,p)==(atomic(x:=xi;y:=yi);piece:=p);
 
-public promotionZone: Player ==> bool
+public promotionZone: Board`Player ==> bool
 promotionZone(p) ==
 	if (p = <White> and y < 4) 
 	then return true
@@ -28,8 +23,4 @@ promotionZone(p) ==
 	then return true
 	else return false;
 	
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
 end Cell

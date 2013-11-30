@@ -12,5 +12,5 @@ validMovement(c1,c2) == if promoted then return validGoldGeneralMove(c1,c2)
 													   (c1.y = c2.y + y * direction() and
 													   forall yi in set ({c2.y+direction(),...,c2.y+(y-1)*direction()} union {c2.y+(y-1)*direction(),...,c2.y+direction()}) &
 													   (Board`getInstance().getCell(c1.x,yi).piece = nil) 
-													   ); 
+													   ) and (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo)); 
 end Lance

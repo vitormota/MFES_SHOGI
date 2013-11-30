@@ -1,0 +1,91 @@
+class TestCell
+
+instance variables
+
+public c : Cell;
+public x: nat1;
+public y: nat1;
+public p: Piece;
+
+operations
+
+public AssertTrue: bool ==> ()
+AssertTrue(a) == return
+pre a;
+
+public CellConst: () ==> ()
+CellConst() == 
+(
+	x := 5;
+	y := 5;
+	c := new Cell (x,y);
+);
+
+public CellConstPiece: () ==> ()
+CellConstPiece() == 
+(
+	x := 5;
+	y := 5;
+	p := new Rook(<White>);
+	c := new Cell (x,y,p);
+);
+
+public TestPromZoneW: () ==> ()
+TestPromZoneW() == 
+(
+	x := 5;
+	y := 3;
+	p := new Rook(<White>);
+	c:= new Cell(x,y);
+	AssertTrue(c.promotionZone(p.belongTo));
+);
+
+public TestPromZoneB: () ==> ()
+TestPromZoneB() == 
+(
+	x := 5;
+	y := 9;
+	p := new King(<Black>);
+	c:= new Cell(x,y);
+	AssertTrue(c.promotionZone(p.belongTo));
+);
+
+public TesTInvalidPromZoneW: () ==> ()
+TesTInvalidPromZoneW() == 
+(
+	x := 5;
+	y := 9;
+	p := new King(<White>);
+	c:= new Cell(x,y);
+	AssertTrue(c.promotionZone(p.belongTo));
+);
+
+public TesTInvalidPromZoneB: () ==> ()
+TesTInvalidPromZoneB() == 
+(
+	x := 5;
+	y := 1;
+	p := new King(<Black>);
+	c:= new Cell(x,y);
+	AssertTrue(c.promotionZone(p.belongTo));
+);
+
+public CellOutOfBounds: () ==> ()
+CellOutOfBounds() == 
+(
+	--invalid x
+	x := 12;
+	y := 9;
+	c := new Cell(x,y);
+	--invalid y
+	x := 7;
+	y := 8;
+	c := new Cell(x,y);
+	-- invalid x,y
+	x := 10;
+	y := 10;
+	c := new Cell(x,y);
+);
+
+
+end TestCell
