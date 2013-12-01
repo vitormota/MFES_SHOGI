@@ -19,7 +19,7 @@ BoardState(state, captured, t) ==
 
 public equals: Board ==> bool
 equals(b) == return linesEquals(b.getLines()) and 
-										playerEquals(b.turn) and
+										--playerEquals(b.turn) and
 										capturedEquals(b.getCapturedPieces());
 
 private linesEquals: map nat1 to BoardLine ==> bool
@@ -33,7 +33,8 @@ linesEquals(l) ==
 								  		   (l(y).getCell(x).piece <> nil and lines(y).getCell(x).piece = nil)
 								  		then return false
 								  		elseif l(y).getCell(x).piece <> nil and lines(y).getCell(x).piece <> nil and
-								  					 not sameclass(l(y).getCell(x).piece,lines(y).getCell(x).piece)
+								  					 (not sameclass(l(y).getCell(x).piece,lines(y).getCell(x).piece) or 
+								  					 l(y).getCell(x).piece.belongTo <> lines(y).getCell(x).piece.belongTo)
 								  		then return false;
 								  	)
 								  );

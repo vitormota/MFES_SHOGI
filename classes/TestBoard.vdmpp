@@ -23,11 +23,20 @@ TestMove() ==
 	b1.move(b1.getCell(1,3),b1.getCell(1,4));
 	
 	AssertTrue(b1.turn = <Black>);
+	AssertTrue(b1.getCell(1,3).piece = nil);
 	
+	b1.turn := <White>;
+	AssertTrue((hd b1.allMoves).equals(b1));
+	b1.turn := <Black>;
 	
 	AssertTrue(isofclass(Pawn,b1.getCell(1,7).piece));
 	
 	b1.move(b1.getCell(1,7),b1.getCell(1,6));
+	
+	b1.turn := <Black>;
+	AssertTrue((hd b1.allMoves).equals(b1));
+	b1.turn := <White>;
+	
 	b1.move(b1.getCell(1,4),b1.getCell(1,5));
 	
 	AssertTrue(len b1.getCapturedPieces()(<White>) = 0);
@@ -45,10 +54,40 @@ TestMove() ==
 	
 	AssertTrue(b1.turn = <Black>);
 	
-	b1.dropPiece(b1.getCell(5,5), b1.getCapturedPieces()(<Black>)(1));
+	b1.dropPiece(b1.getCell(1,4), b1.getCapturedPieces()(<Black>)(1));
 	
 	AssertTrue(len b1.getCapturedPieces()(<Black>) = 0);
 	AssertTrue(b1.turn = <White>);
+);
+
+public testEndGameByRepetition:() ==> ()
+testEndGameByRepetition() ==
+(
+	dcl b1: Board := Board`getInstance();
+	
+	AssertTrue(b1.getGameState() = <Playing>);
+	
+	b1.move(b1.getCell(5,1),b1.getCell(5,2));
+	b1.move(b1.getCell(5,9),b1.getCell(5,8));
+	
+	b1.move(b1.getCell(5,2),b1.getCell(5,1));
+	b1.move(b1.getCell(5,8),b1.getCell(5,9));
+
+	b1.move(b1.getCell(5,1),b1.getCell(5,2));
+	b1.move(b1.getCell(5,9),b1.getCell(5,8));
+	
+	b1.move(b1.getCell(5,2),b1.getCell(5,1));
+	b1.move(b1.getCell(5,8),b1.getCell(5,9));
+	
+	b1.move(b1.getCell(5,1),b1.getCell(5,2));
+	b1.move(b1.getCell(5,9),b1.getCell(5,8));
+	
+	b1.move(b1.getCell(5,2),b1.getCell(5,1));
+	b1.move(b1.getCell(5,8),b1.getCell(5,9));
+	
+	b1.move(b1.getCell(5,1),b1.getCell(5,2));
+	
+	AssertTrue(b1.getGameState() = <BlackWins>);
 );
 
 -------------------------------------------------

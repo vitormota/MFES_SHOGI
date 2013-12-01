@@ -50,6 +50,21 @@ pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c2 = Board`getInstance().get
     c1.piece <> nil;												
 
 
+protected protectingKing: Cell ==> bool
+protectingKing(c) ==
+(
+	dcl ret: bool;
+	c.piece:= nil;
+	
+	ret := Board`getInstance().check(belongTo);
+	
+	c.piece:= self;
+	
+	return ret;
+)
+pre c.piece = self;
+
+
 
 functions
 protected dist: nat*nat -> nat

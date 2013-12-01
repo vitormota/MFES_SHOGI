@@ -12,6 +12,7 @@ public validMovement: Cell*Cell ==> bool
 																 ( abs(c1.x - xi) = abs(c1.y - yi) and 
 																   Board`getInstance().getCell(xi,yi).piece = nil ) or
 																 ( promoted and validKingMove(c1,c2))) and
-																 (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo)); 
+																 (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo)) 
+																 and not protectingKing(c1); 
 
 end Bishop
