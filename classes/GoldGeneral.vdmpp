@@ -6,6 +6,6 @@ public GoldGeneral: Player ==> GoldGeneral
 GoldGeneral(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
-	validMovement(c1,c2) == return validGoldGeneralMove(c1,c2);
+	validMovement(c1,c2) == return validGoldGeneralMove(c1,c2) and not protectingKing(c1);
 
 end GoldGeneral

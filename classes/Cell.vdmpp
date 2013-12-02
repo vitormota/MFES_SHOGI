@@ -1,9 +1,5 @@
 class Cell
 
-types
-
-public Player = <White> | <Black>;
-
 instance variables
 
 public y : nat1;
@@ -17,9 +13,9 @@ public Cell: nat1 * nat1 ==> Cell
 Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
 
 public Cell: nat1*nat1*Piece==>Cell
-Cell(xi,yi,p)==(x:=xi;y:=yi;piece:=p);
+Cell(xi,yi,p)==(atomic(x:=xi;y:=yi);piece:=p);
 
-public promotionZone: Player ==> bool
+public promotionZone: Board`Player ==> bool
 promotionZone(p) ==
 	if (p = <White> and y < 4) 
 	then return true

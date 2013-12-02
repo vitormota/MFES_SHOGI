@@ -19,7 +19,8 @@ direction() == if belongTo = <White> then return -1 else return 1;
 
 public validMovement: Cell*Cell ==> bool
 validMovement(c1,c2) == is subclass responsibility
-pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c1 = Board`getInstance().getCell(c2.x,c2.y);
+pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c1 = Board`getInstance().getCell(c2.x,c2.y) and
+		c1.piece <> nil;
 
 public capture:() ==> ()
 capture() == (if belongTo = <White> then belongTo := <Black> else belongTo:= <White>; promoted:= false)
@@ -35,14 +36,33 @@ getPromoted() == return promoted;
 protected validGoldGeneralMove: Cell*Cell ==> bool
 validGoldGeneralMove(c1,c2) == return (c1.x = c2.x and abs(c1.y-c2.y) = 1) or 
 																      (c1.y = c2.y and abs(c1.x-c2.x) = 1) or
-																      (c1.y = c2.y + direction() and abs(c1.x-c2.x) = 1)
-pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c1 = Board`getInstance().getCell(c2.x,c2.y);
+																      (c1.y = c2.y + direction() and abs(c1.x-c2.x) = 1) and
+																      (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo))
+pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c2 = Board`getInstance().getCell(c2.x,c2.y) and 
+    c1.piece <> nil;
 
 protected validKingMove: Cell*Cell ==> bool
 validKingMove(c1,c2) == return (abs(c1.x-c2.x) = 0 and abs(c1.y-c2.y) = 1 ) or
 															 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 0 ) or
-															 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 1 )
-pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c1 = Board`getInstance().getCell(c2.x,c2.y);												
+															 (abs(c1.x-c2.x) = 1 and abs(c1.y-c2.y) = 1 ) and
+															 (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo))
+pre c1 = Board`getInstance().getCell(c1.x,c1.y) and c2 = Board`getInstance().getCell(c2.x,c2.y) and 
+    c1.piece <> nil;												
+
+
+protected protectingKing: Cell ==> bool
+protectingKing(c) ==
+(
+	dcl ret: bool;
+	c.piece:= nil;
+	
+	ret := Board`getInstance().check(belongTo);
+	
+	c.piece:= self;
+	
+	return ret;
+)
+pre c.piece = self;
 
 
 
@@ -53,6 +73,5 @@ dist(n1,n2) == abs(n1-n2);
 protected intermediateVals: nat1*nat1 -> set of nat1
 intermediateVals(x1,x2) == {x1 + (x2-x1)/abs(x2-x1),..., x2 + (x1-x2)/abs(x1-x2)} union 
 											  {x2 + (x1-x2)/abs(x1-x2),..., x1 + (x2-x1)/abs(x2-x1)}
-traces
--- TODO Define Combinatorial Test Traces here
+
 end Piece

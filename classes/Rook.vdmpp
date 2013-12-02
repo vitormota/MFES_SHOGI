@@ -12,6 +12,8 @@ public validMovement: Cell*Cell ==> bool
 																 (abs(c1.x-c2.x) <> 0 and abs(c1.y-c2.y) = 0 and
 																  forall xi in set intermediateVals(c1.x,c2.x) &
 																  Board`getInstance().getCell(c1.y,xi).piece = nil) or  --Horizontal
-																  (promoted and validKingMove(c1,c2));
+																  (promoted and validKingMove(c1,c2)) and
+																 (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo))
+																 and not protectingKing(c1);
 
 end Rook
