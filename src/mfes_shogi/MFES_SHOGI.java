@@ -6,6 +6,8 @@
 
 package mfes_shogi;
 
+import java.util.Scanner;
+
 import myutils.R;
 import jp.vdmtools.VDM.CGException;
 import jp.vdmtools.VDM.UTIL;
@@ -16,15 +18,97 @@ import jp.vdmtools.VDM.UTIL;
  */
 public class MFES_SHOGI {
 
-    /**
+    private static final String INSERT_Y = "Insira o y da peca que deseja mover:";
+	private static final String INSERT_X = "Insira o x da peca que deseja mover:";
+	private static final String INSERT_X_FINAL = "Insira o x da celula para onde deseja mover a peca:";
+	private static final String INSERT_Y_FINAL = "Insira o y da celula para onde deseja mover a peca:";
+
+	/**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
+    	Scanner s = new Scanner(System.in);
+    	try {
+			Board b = Board.getInstance();
+			printBoard();
+	        
+			while(UTIL.equals(b.getGameState(), new quotes.Playing())){
+				
+				while(!makeMove(s)){
+					System.out.println();
+					System.out.println("Movimento inalido! Tente outra vez.");
+					System.out.println();
+				}
+		        
+		        printBoard();
+			}
+	        
+		} catch (CGException e1) {
+			e1.printStackTrace();
+		}
+    	finally{
+    		s.close();
+    	}
+   
+        
+        
+    }
+
+	private static boolean makeMove(Scanner s) {
+		System.out.println();
+		
+		int xi = inputInt(s,INSERT_X);
+		int yi = inputInt(s,INSERT_Y);
+		int xf = inputInt(s, INSERT_X_FINAL);
+		int yf = inputInt(s, INSERT_Y_FINAL);
+		
+		
+		try {
+			Board.getInstance().move(Board.getInstance().getCell(xi, yi), Board.getInstance().getCell(xf, yf));
+			return true;
+		} catch (CGException e) {
+			return false;
+		}
+	}
+
+	private static int inputInt(Scanner s, String message) {
+		System.out.println(message);
+		String str = s.nextLine();
+		while(!validInt(str)){
+			System.out.println("Input invalido! Tente novamente:");
+			str = s.nextLine();
+		}
+		return Integer.parseInt(str);
+	}
+	
+	private static boolean validInt(String s){
+		try{
+			Integer.parseInt(s);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+
+	private static void printBoard() {
+		try {
 			Board b = Board.getInstance();
 			
-			for(int y=1; y<= 9; y++ )
+			System.out.print("   ");
+			for(int x=1; x <=9; x++){
+				System.out.print(" " + x + "  ");
+			}
+			System.out.println();
+			System.out.print("  ");
+			for(int x=1; x <=9; x++){
+				System.out.print("----");
+			}
+			System.out.println();
+			
+			for(int y=9; y> 0; y-- )
 			{
+				System.out.print(y + "| ");
 				for(int x=1; x<=9; x++)
 				{
 					Cell c = b.getCell(x, y);
@@ -34,14 +118,14 @@ public class MFES_SHOGI {
 						System.out.print(" ");
 					}
 					else
-						System.out.print(" -  ");
+						System.out.print("    ");
 				}
 				System.out.println();
 			}
 		} catch (CGException e) {
 			e.printStackTrace();
 		}
-    }
+	}
     
     private static void prettyPrint(String className, Object belongTo){
     	switch(className){
