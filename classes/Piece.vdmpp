@@ -70,7 +70,7 @@ functions
 protected dist: nat*nat -> nat
 dist(n1,n2) == abs(n1-n2);
 
-protected intermediateVals: nat1*nat1 -> set of nat1
+public intermediateVals: nat1*nat1 -> set of nat1
 intermediateVals(x1,x2) == {x1 + (x2-x1)/abs(x2-x1),..., x2 + (x1-x2)/abs(x1-x2)} union 
 											  {x2 + (x1-x2)/abs(x1-x2),..., x1 + (x2-x1)/abs(x2-x1)}
 
