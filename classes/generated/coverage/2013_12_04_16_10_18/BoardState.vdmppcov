@@ -1,0 +1,63 @@
+class BoardState
+
+instance variables
+
+private capturedPieces : map Board`Player to seq of Piece;
+public lines: map nat1 to BoardLine;
+public turn: Board`Player;
+
+operations
+
+public BoardState: seq of (seq of Board`PieceType)*map Board`Player to seq of Piece*Board`Player ==> BoardState
+BoardState(state, captured, t) == 
+(
+	lines := {y |-> new BoardLine( Board`mapStartSeq(state(y), 1, y), y ) | y in set {1,...,9}};
+	capturedPieces:={|->};
+	capturedPieces:= capturedPieces ++ captured;
+	if t = <White> then turn:= <White> else turn:= <Black>
+);
+
+public equals: Board ==> bool
+equals(b) == return linesEquals(b.getLines()) and 
+										--playerEquals(b.turn) and
+										capturedEquals(b.getCapturedPieces());
+
+private linesEquals: map nat1 to BoardLine ==> bool
+linesEquals(l) == 
+(
+									for all y in set dom l do
+								  (
+								  	for all x in set {1,...,9} do
+								  	(
+								  		if (l(y).getCell(x).piece = nil and lines(y).getCell(x).piece <> nil) or
+								  		   (l(y).getCell(x).piece <> nil and lines(y).getCell(x).piece = nil)
+								  		then return false
+								  		elseif l(y).getCell(x).piece <> nil and lines(y).getCell(x).piece <> nil and
+								  					 (not sameclass(l(y).getCell(x).piece,lines(y).getCell(x).piece) or 
+								  					 l(y).getCell(x).piece.belongTo <> lines(y).getCell(x).piece.belongTo)
+								  		then return false;
+								  	)
+								  );
+								  return true;
+);
+
+private playerEquals: Board`Player ==> bool
+playerEquals(p) == return p = turn;
+
+private capturedEquals: map Board`Player to seq of Piece ==> bool
+capturedEquals(c) == 
+(
+	for all p in set dom c do
+	(
+		if( p not in set dom capturedPieces )
+		then return false
+		else for all piece in set elems c(p) do
+		(
+			if (not exists pi in set elems capturedPieces(p) & sameclass(pi,piece))
+			then return false;
+		)
+	);
+	return true;
+);
+
+end BoardState

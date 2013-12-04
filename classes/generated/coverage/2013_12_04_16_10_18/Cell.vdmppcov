@@ -1,0 +1,26 @@
+class Cell
+
+instance variables
+
+public y : nat1;
+public x : nat1;
+public piece: [Piece];
+
+inv x in set {1,...,9} and y in set {1,...,9}
+operations
+
+public Cell: nat1 * nat1 ==> Cell
+Cell(xi,yi)== (atomic(x:=xi;y:=yi); piece:=nil);
+
+public Cell: nat1*nat1*Piece==>Cell
+Cell(xi,yi,p)==(atomic(x:=xi;y:=yi);piece:=p);
+
+public promotionZone: Board`Player ==> bool
+promotionZone(p) ==
+	if (p = <White> and y < 4) 
+	then return true
+	elseif p = <Black> and y > 6
+	then return true
+	else return false;
+	
+end Cell

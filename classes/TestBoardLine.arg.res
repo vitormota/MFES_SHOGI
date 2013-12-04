@@ -1,0 +1,3 @@
+objref4(TestBoardLine):
+  <  >
+
