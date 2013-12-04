@@ -663,12 +663,12 @@ public class Board implements EvaluatePP {
     try {
       Boolean cond_3 = null;
       if ((cond_3 = Boolean.valueOf(UTIL.equals(p, new quotes.White()))).booleanValue()) 
-        cond_3 = Boolean.valueOf((c.y).intValue() < 4);
+        cond_3 = Boolean.valueOf((c.y).intValue() > 7);
       if (cond_3.booleanValue()) 
         return Boolean.TRUE;
       Boolean cond_12 = null;
       if ((cond_12 = Boolean.valueOf(UTIL.equals(p, new quotes.Black()))).booleanValue()) 
-        cond_12 = Boolean.valueOf((c.y).intValue() > 7);
+        cond_12 = Boolean.valueOf((c.y).intValue() < 4);
       if (cond_12.booleanValue()) 
         return Boolean.TRUE;
       return Boolean.FALSE;
