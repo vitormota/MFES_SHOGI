@@ -115,6 +115,5 @@ public class Pawn extends Piece {
     }
   }
 // ***** VDMTOOLS END Name=validMovement#2|Cell|Cell
-
 }
 ;

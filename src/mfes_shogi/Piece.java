@@ -408,6 +408,11 @@ public abstract class Piece implements EvaluatePP {
     return varRes_3;
   }
 // ***** VDMTOOLS END Name=intermediateVals#2|Number|Number
-
+  
+  @Override
+  public String toString(){
+      return this.getClass().getSimpleName();
+  }
+  
 }
 ;
