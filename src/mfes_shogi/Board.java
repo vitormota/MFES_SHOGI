@@ -480,16 +480,7 @@ public class Board implements EvaluatePP {
       capturedPieces.put(turn, mr_6);
       if (!this.inv_Board().booleanValue()) 
         UTIL.RunTime("Instance invariant failure in Board");
-      if (UTIL.equals(turn, new quotes.White())) {
-        turn = new quotes.Black();
-        if (!this.inv_Board().booleanValue()) 
-          UTIL.RunTime("Instance invariant failure in Board");
-      }
-      else {
-        turn = new quotes.White();
-        if (!this.inv_Board().booleanValue()) 
-          UTIL.RunTime("Instance invariant failure in Board");
-      }
+      endRound();
     }
     finally {
       sentinel.leaving(((BoardSentinel)sentinel).dropPiece);
