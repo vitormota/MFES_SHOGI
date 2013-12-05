@@ -169,12 +169,11 @@ check(p,t) == if exists c in set getAllCellsFromPlayer(getOtherPlayer(p),1) & c.
 pre t = getCell(t.x,t.y)
 post turn = turn~;
 
-public getCheckingPiece: Player ==> Cell
+public getCheckingPiece: Player ==> set of Cell
 getCheckingPiece(p) == 
 (
-	let c in set getAllCellsFromPlayer(getOtherPlayer(p),1)  be st 
-		c.piece.validMovement(c,getKingFromPlayer(p))
-		in return c;
+	return {c| c in set getAllCellsFromPlayer(getOtherPlayer(p),1) &
+						 c.piece.validMovement(c,getKingFromPlayer(p))};
 )
 post turn = turn~;
 
@@ -182,10 +181,30 @@ post turn = turn~;
 public endGame:()==>bool
 endGame() == if (check(turn) and 
 								(not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c) or
-								not exists c2 in set getAllCellsFromPlayer(turn,1) & c2.piece.validMovement(c2,getCheckingPiece(turn)))) or
+								not exists c2 in set getAllCellsFromPlayer(turn,1), checking in set getCheckingPiece(turn) & 
+								(c2.piece.validMovement(c2,checking) and not checkAfterEat(c2,checking))
+								)) or
 								card stateEquals() >= 4
 						 then return true
 						 else return false
+post turn = turn~;
+
+private checkAfterEat:Cell*Cell ==> bool
+checkAfterEat(c1,c2) == 
+(
+	dcl aux: [Piece] := c2.piece;
+	dcl ret:bool;
+	c2.piece := c1.piece;
+	c1.piece:=nil;
+	
+	ret := check(turn);
+	
+	c1.piece:=c2.piece;
+	c2.piece:=aux;
+	
+	return ret;
+)
+pre c1.piece <> nil and c1.piece.belongTo = turn
 post turn = turn~;
 
 private getAllEmptyCells: nat1 ==> set of Cell
