@@ -180,9 +180,9 @@ post turn = turn~;
 --Verifica se jogador atual perdeu jogo
 public endGame:()==>bool
 endGame() == if (check(turn) and 
-								(not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c) or
-								not exists c2 in set getAllCellsFromPlayer(turn,1), checking in set getCheckingPiece(turn) & 
-								(c2.piece.validMovement(c2,checking) and not checkAfterEat(c2,checking))
+								((not exists c in set getAllEmptyCells(1) & getKingFromPlayer(turn).piece.validMovement(getKingFromPlayer(turn),c)) or
+								(not exists c2 in set getAllCellsFromPlayer(turn,1), checking in set getCheckingPiece(turn) & 
+								(c2.piece.validMovement(c2,checking) and not checkAfterEat(c2,checking)))
 								)) or
 								card stateEquals() >= 4
 						 then return true
@@ -196,6 +196,8 @@ checkAfterEat(c1,c2) ==
 	dcl ret:bool;
 	c2.piece := c1.piece;
 	c1.piece:=nil;
+	
+	
 	
 	ret := check(turn);
 	
