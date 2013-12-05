@@ -1,10 +1,5 @@
 class Knight is subclass of Piece
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
+
 operations
 
 public Knight: Player ==> Knight
@@ -16,8 +11,5 @@ public validMovement: Cell*Cell ==> bool
 																      c1.y = c2.y + 2*direction() and
 																 			(c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo)) 
 																 			and not protectingKing(c1,c2); 
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+
 end Knight
