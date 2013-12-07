@@ -62,9 +62,9 @@
 \itap0\li0\ri0\sb0\sa0}{\pgp\ipgp24\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp8\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}}{\*\rsidtbl \rsid614339\rsid1206575\rsid1211636\rsid1335284
 \rsid1669016\rsid1861160\rsid1865638\rsid1998107\rsid2449219\rsid2830865\rsid2911504\rsid3085813\rsid3094230\rsid3285325\rsid3366168\rsid3762770\rsid3891360\rsid4209933\rsid4281668\rsid4287903\rsid4412612\rsid4861905\rsid5073430\rsid5201012\rsid5458024
 \rsid5651465\rsid5925853\rsid5977618\rsid6123194\rsid6254110\rsid7157316\rsid7555803\rsid7559481\rsid7633712\rsid7825017\rsid7945140\rsid7958436\rsid8132895\rsid8196654\rsid8597918\rsid9072797\rsid9114857\rsid9638796\rsid9793886\rsid11078918\rsid11172515
-\rsid11348468\rsid11364667\rsid11542148\rsid11603925\rsid11614689\rsid11866300\rsid12595642\rsid12726102\rsid12933945\rsid13116012\rsid13711655\rsid13720701\rsid13780789\rsid13971075\rsid14364433\rsid14891498\rsid15217517\rsid15598498\rsid15881014
-\rsid16006690\rsid16014267\rsid16138096\rsid16190056\rsid16458642\rsid16599897\rsid16600333\rsid16734490}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info
-{\title Classe Stack}{\author Jo\'e3o}{\operator user}{\creatim\yr2013\mo12\dy4\hr16\min5}{\revtim\yr2013\mo12\dy7\hr12\min21}{\version35}{\edmins111}{\nofpages9}{\nofwords2320}{\nofchars12532}{\*\company IFAD}{\nofcharsws14823}{\vern49167}}
+\rsid11348468\rsid11364667\rsid11542148\rsid11603925\rsid11614689\rsid11866300\rsid12595642\rsid12726102\rsid12933945\rsid13116012\rsid13119123\rsid13711655\rsid13720701\rsid13780789\rsid13971075\rsid14364433\rsid14891498\rsid15217517\rsid15598498
+\rsid15881014\rsid16006690\rsid16014267\rsid16138096\rsid16190056\rsid16458642\rsid16599897\rsid16600333\rsid16734490}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info
+{\title Classe Stack}{\author Jo\'e3o}{\operator user}{\creatim\yr2013\mo12\dy4\hr16\min5}{\revtim\yr2013\mo12\dy7\hr13\min22}{\version36}{\edmins112}{\nofpages9}{\nofwords2317}{\nofchars12516}{\*\company IFAD}{\nofcharsws14804}{\vern49167}}
 {\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw12240\paperh15840\margl1701\margr1701\margt1417\margb1417\gutter0\ltrsect 
 \widowctrl\ftnbj\aenddoc\hyphhotz425\trackmoves0\trackformatting1\donotembedsysfont0\relyonvml0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0
 \noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dghspace180\dgvspace180\dghorigin1701\dgvorigin1984\dghshow0\dgvshow0\jexpand\viewkind1\viewscale100\pgbrdrhead\pgbrdrfoot\nolnhtadjtbl\nojkernpunct\rsidroot15598498 
@@ -119,7 +119,7 @@
 \par     forall p in set elems(seqp) &
 \par \tab p in set elems(capturedPieces(p.belongTo));
 \par }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11542148 inv lastPlayedPiece = nil or 
-\par     lastPlayedPiece = getCell(lastPlayedPiece.x, }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11542148 lastPlayedPiece}{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11542148 .y);
+\par     lastPlayedPiece = getCell(lastPlayedPiece.x, lastPlayedPiece.y);
 \par }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11614689\charrsid11614689 
 \par private static board:Board := new Board();
 \par 
@@ -252,14 +252,14 @@ allMoves := [new BoardState(getCurrentState(1),capturedPieces)] ^ allMoves;
 \par private needsToPromote:Cell ==> bool
 \par needsToPromote(c)==
 \par (
-\par \tab if(c.piece = nil) then return false;
 \par \tab if((isofclass(Pawn,c.piece) or isofclass(Lance,c.piece)) and c.y = getPlayersFarthestRank(c.piece.belongTo)) then return true;
 \par \tab if(isofclass(Knight,c.piece) and (c.y = getPlayersSecondFarthestRank(c.piece.belongTo) or
 \par \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab \tab c.y = getPlayersFarthestRank(c.piece.belongTo))) then return true;
 \par \tab 
 \par \tab return false;
-\par );
-\par 
+\par }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid13119123 )}{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11614689 
+\par }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid13119123 pre c.piece <> nil;}{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid13119123\charrsid11614689 
+\par }{\rtlch\fcs1 \ab\af2 \ltrch\fcs0 \b\lang1024\langfe1024\langnp1033\insrsid11614689\charrsid11614689 
 \par private getPlayersFarthestRank: Player ==> nat1
 \par getPlayersFarthestRank(p) == if( p= <White>) then return 9 else return 1;
 \par 
@@ -568,8 +568,8 @@ fffffffffffffffffdfffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e500000000000000000000000070f0
-eedc46f3ce01feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
+ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e50000000000000000000000001077
+ca594ff3ce01feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000105000000000000}}
