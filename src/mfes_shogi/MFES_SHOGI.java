@@ -51,6 +51,14 @@ public class MFES_SHOGI {
 
                 //printBoard();
             }
+            
+            System.out.println("Game ended!");
+            if(UTIL.equals(b.getGameState(), new quotes.WhiteWins()))
+            	System.out.println("White Player won");
+            else if(UTIL.equals(b.getGameState(), new quotes.BlackWins()))
+            	System.out.println("Black Player won");
+            else if(UTIL.equals(b.getGameState(), new quotes.Draw()))
+            	System.out.println("Draw!");
 
         } catch (CGException e1) {
             e1.printStackTrace();
