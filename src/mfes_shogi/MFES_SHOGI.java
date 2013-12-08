@@ -279,7 +279,7 @@ public class MFES_SHOGI {
             System.exit(0);
         } else {
             //no valid action
-            System.out.println("Bad input action, only L(ist) or M(ove) are supported.");
+            System.out.println("Bad input action, try 'h' for help.");
             throw new CGException();
         }
 
