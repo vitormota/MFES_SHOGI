@@ -7,12 +7,12 @@ Lance(p) == Piece(p);
 
 public validMovement: Cell*Cell ==> bool
 validMovement(c1,c2) == if promoted then return validGoldGeneralMove(c1,c2)
-												else return c1.x = c2.x and 
-													   exists y in set {1,...,8} & 
-													   (c1.y = c2.y + y * direction() and
-													   forall yi in set ({c2.y+direction(),...,c2.y+(y-1)*direction()} union {c2.y+(y-1)*direction(),...,c2.y+direction()}) &
-													   (Board`getInstance().getCell(c1.x,yi).piece = nil or yi = y) 
-													   ) and 
-													   (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo))
-													   and not protectingKing(c1,c2); 
+                                                                                                else return c1.x = c2.x and 
+                                                                                                           exists y in set {1,...,8} & 
+                                                                                                           (c1.y = c2.y + y * direction() and
+                                                                                                           forall yi in set ({c2.y+direction(),...,c2.y+(y-1)*direction()} union {c2.y+(y-1)*direction(),...,c2.y+direction()}) &
+                                                                                                           (Board`getInstance().getCell(c1.x,yi).piece = nil or yi = y) 
+                                                                                                           ) and 
+                                                                                                           (c2.piece = nil or (c2.piece <> nil and c2.piece.belongTo <> c1.piece.belongTo))
+                                                                                                           and not protectingKing(c1,c2); 
 end Lance
