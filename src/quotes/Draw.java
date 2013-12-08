@@ -19,19 +19,19 @@ package quotes;
 
 
 
-public class SILVERGENERALW {
+public class Draw {
 
 // ***** VDMTOOLS START Name=hc KEEP=NO
   static private int hc = 0;
 // ***** VDMTOOLS END Name=hc
 
 
-// ***** VDMTOOLS START Name=SILVERGENERALW KEEP=NO
-  public SILVERGENERALW () {
+// ***** VDMTOOLS START Name=Draw KEEP=NO
+  public Draw () {
     if (hc == 0) 
       hc = super.hashCode();
   }
-// ***** VDMTOOLS END Name=SILVERGENERALW
+// ***** VDMTOOLS END Name=Draw
 
 
 // ***** VDMTOOLS START Name=hashCode KEEP=NO
@@ -43,14 +43,14 @@ public class SILVERGENERALW {
 
 // ***** VDMTOOLS START Name=equals#1|Object KEEP=NO
   public boolean equals (Object obj) {
-    return obj instanceof SILVERGENERALW;
+    return obj instanceof Draw;
   }
 // ***** VDMTOOLS END Name=equals#1|Object
 
 
 // ***** VDMTOOLS START Name=toString KEEP=NO
   public String toString () {
-    return "<SILVERGENERALW>";
+    return "<Draw>";
   }
 // ***** VDMTOOLS END Name=toString
 
